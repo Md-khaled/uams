@@ -3,6 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Availability;
+use App\Models\Service;
+use App\Models\User;
+use App\Models\UserService;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,11 +16,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        $users = User::factory()->count(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $services = Service::factory()->count(10)->create();
+
+        $users->each(function ($user) use ($services) {
+            $user->services()->attach(
+                $services->random(rand(1, 3))->pluck('id')->toArray()
+            );
+        });
+
+        Availability::factory()->count(50)->create();
     }
 }

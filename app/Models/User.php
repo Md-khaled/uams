@@ -38,6 +38,16 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'service_users');
+    }
+
+    public function availability()
+    {
+        return $this->hasMany(Availability::class);
+    }
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
